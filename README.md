@@ -20,6 +20,8 @@ Built by a security researcher for security researchers.
 | **ABI Parser** | Extracts and analyzes function signatures, access control patterns, and state mutability |
 | **Vulnerability Detector** | Pattern-matching engine for reentrancy, oracle manipulation, flash loan vectors |
 | **Storage Analyzer** | Maps storage slots, detects uninitialized proxies and slot collisions |
+| **Vault Detector** | ERC-4626 inflation attack, share manipulation, missing virtual offset (Cancun+) |
+| **Transient Storage** | EIP-1153 TLOAD/TSTORE analysis, reentrancy guard validation, stale state detection |
 | **Contract Scanner** | Full pipeline: fetches verified source → analyzes → reports findings |
 
 ## Architecture
@@ -35,8 +37,8 @@ evm-security-toolkit/
 │   ├── detectors/          # Vulnerability detection modules
 │   │   ├── reentrancy.py   # Cross-function & cross-contract reentrancy
 │   │   ├── access.py       # Missing access control checks
-│   │   ├── oracle.py       # Oracle manipulation vectors
-│   │   └── arithmetic.py   # Precision loss & overflow patterns
+│   │   ├── vault.py        # ERC-4626 vault inflation & share manipulation
+│   │   └── transient.py    # EIP-1153 TLOAD/TSTORE analysis (Cancun)
 │   └── utils/              # Shared utilities
 │       ├── config.py       # Configuration management
 │       ├── rpc.py          # EVM RPC client
@@ -106,18 +108,18 @@ vulns = detector.analyze()
 
 ### Critical
 - **Reentrancy** — Cross-function, cross-contract, and read-only reentrancy patterns
-- **Oracle Manipulation** — Spot price reliance, TWAP manipulation windows
-- **Flash Loan Vectors** — Invariant violations exploitable within single transaction
+- **ERC-4626 Vault Inflation** — First depositor attack, share manipulation, exchange rate hijack
 - **Proxy Vulnerabilities** — Uninitialized UUPS/Transparent proxies, storage collisions
 
 ### High
 - **Access Control** — Missing `onlyOwner`, unprotected `selfdestruct`, open initializers
+- **Transient Storage (EIP-1153)** — TLOAD/TSTORE misuse, missing reset, stale reentrancy locks
 - **Arithmetic** — Precision loss in division-before-multiplication, unchecked downcasts
-- **MEV Exposure** — Sandwich-vulnerable swap paths, front-runnable liquidations
 
 ### Medium
 - **State Inconsistency** — Missing CEI pattern, cross-function state leaks
 - **Input Validation** — Unchecked return values, missing zero-address checks
+- **Vault Share Rounding** — Missing minimum deposit, zero-share minting edge cases
 
 ## Contributing
 
