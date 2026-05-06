@@ -1,0 +1,9 @@
+web3>=6.15.0
+eth-abi>=5.0.0
+eth-utils>=3.0.0
+requests>=2.31.0
+rich>=13.7.0
+click>=8.1.7
+pydantic>=2.5.0
+disassembler>=0.1.0
+python-dotenv>=1.0.0
